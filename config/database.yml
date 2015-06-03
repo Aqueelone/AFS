@@ -1,0 +1,30 @@
+development:
+  adapter: postgresql
+  database: afsDev
+  encoding: unicode
+  pool: 16
+  username: su
+  password: su
+  host: localhost
+  
+test: &TEST
+  adapter: postgresql
+  database: afsTest
+  encoding: unicode
+  pool: 16
+  username: su
+  password: su
+  host: localhost
+
+production:
+  adapter: postgresql
+  database: afs
+  pool: 16
+  encoding: su
+  username: su
+  password: su
+  host: localhost
+  
+cucumber:
+  <<: *TEST
+
