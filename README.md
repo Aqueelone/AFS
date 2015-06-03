@@ -1,0 +1,2 @@
+# AFS
+Analitical Forecasting System
