@@ -1,42 +1,54 @@
 source 'https://rubygems.org'
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.1'
-# Use sqlite3 as the database for Active Record# inj me
+gem 'rails'
+gem 'rake'
+# inj me
 
+#auth
 gem 'devise'
+gem 'omniauth'
+gem 'omniauth-twitter'
+gem 'omniauth-facebook'
+gem 'omniauth-vkontakte'
+gem 'omniauth-instagram'
+
+#http
 gem 'puma'
 gem 'protected_attributes'
 # Use postgresql9.4 as the database for Active Record
 gem 'pg'
-gem 'sass-rails', '~> 5.0'
+gem 'sass-rails'
 # Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
+gem 'uglifier'
 # Use CoffeeScript for .coffee assets and views
 
-gem 'coffee-rails', '~> 4.1.0'
+gem 'coffee-rails'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
-# Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.0'
+gem 'jbuilder'
 # bundle exec rake doc:rails generates the API under doc/api.
-gem 'sdoc', '~> 0.4.0', group: :doc
+gem 'sdoc', group: :doc
 
 # Use ActiveModel has_secure_password
-gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt'
 
 # Use Unicorn as the app server
 gem 'unicorn'
 
+gem 'eventmachine'
+gem 'em-synchrony'
+gem 'em-websocket'
+gem 'em-http-request'
+gem 'vkontakte_api'
+
 # Use Capistrano for deployment
 gem 'capistrano-rails', group: :development
-
+gem 'active_record-annotate', group: :development
 
 gem 'actionmailer'
 
@@ -44,27 +56,104 @@ gem 'whenever'
 
 gem 'tinymce-rails'
 
-gem 'less-rails'
 gem 'therubyracer'
+gem 'less-rails'
+gem "twitter-bootstrap-rails"
 
 gem 'turbolinks'
 gem 'jquery-turbolinks'
 
+group :production do # we don"t install these on travis to speed up test runs
+  # Administration
+
+  gem "rails_admin", "0.6.7"
+
+  # Analytics
+
+  gem "rack-google-analytics"
+  gem "rack-piwik", require: "rack/piwik"
+
+  # Click-jacking protection
+
+  gem "rack-protection"
+
+  # Process management
+
+  gem "eye"
+
+  # Redirects
+
+  gem "rack-rewrite", require: true
+  gem "rack-ssl", require: "rack/ssl"
+
+  # Third party asset hosting
+
+  gem "asset_sync", require: true
+end
+
+group :development do
+  # Automatic test runs
+  gem "guard-cucumber"
+  gem "guard-jshintrb"
+  gem "guard-rspec"
+  gem "guard-rubocop"
+  gem "guard", require: true
+  gem "rb-fsevent", require: true
+  gem "rb-inotify", require: true
+
+  # Linters
+  gem "jshintrb"
+  gem "rubocop"
+
+  # Preloading environment
+
+  gem "spring"
+  gem "spring-commands-rspec"
+  gem "spring-commands-cucumber"
+
+end
+
+group :test do
+  # RSpec (unit tests, some integration tests)
+
+  gem "fixture_builder"
+  gem "fuubar"
+  gem "rspec-instafail", require: false
+  gem "test_after_commit"
+
+  # Cucumber (integration tests)
+
+  gem "capybara"
+  gem "database_cleaner"
+  gem "selenium-webdriver"
+
+  source "https://rails-assets.org" do
+    gem "rails-assets-jquery-simulate"
+    gem "rails-assets-jquery-simulate-ext"
+  end
+
+  # General helpers
+
+  gem "factory_girl_rails"
+  gem "timecop"
+  gem "webmock", require: false
+  gem "shoulda-matchers", require: false
+end
 
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug'
+  # RSpec (unit tests, some integration tests)
+  gem "rspec-rails"
 
-  # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', '~> 2.0'
+  # Cucumber (integration tests)
+  gem "cucumber-rails", require: false
 
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
-  
-  gem 'rspec-rails', '~> 3.0.0'
-  gem 'factory_girl_rails'
-  gem 'capybara'
-  gem 'database_cleaner'
-  gem 'rubocop'
+  # Jasmine (client side application tests (JS))
+  gem "jasmine"
+  gem "jasmine-jquery-rails"
+  gem "rails-assets-jasmine-ajax", source: "https://rails-assets.org"
+  gem "sinon-rails"
+
+  # silence assets
+  gem "quiet_assets"
 end
 

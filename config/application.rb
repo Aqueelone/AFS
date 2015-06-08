@@ -22,5 +22,19 @@ module AFS
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+    
+    # General Settings
+    config.app_domain = 'afs.blackdream.com'
+
+    # Email
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.perform_deliveries = true
+    config.action_mailer.default_url_options = { host: config.app_domain }
+    config.action_mailer.smtp_settings = {
+      address: 'localhost', 
+      port: '25',
+      enable_starttls_auto: true,
+      domain: 'afs.blackdream.com'
+    }
   end
 end
