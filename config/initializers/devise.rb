@@ -206,8 +206,7 @@ Devise.setup do |config|
   #   manager.intercept_401 = false
   #   manager.default_strategies(:scope => :user).unshift :some_external_strategy
   # end 
-  config.omniauth :instagram, "KEY", "SECRET"
-  config.omniauth :facebook, "KEY", "SECRET"
-  config.omniauth :twitter, "KEY", "SECRET"
-  config.omniauth :vkontakte, "KEY", "SECRET"
+  config.omniauth :facebook, '769164456515552', '978673455420cf462fa80c87a08e32bf', 
+                  :scope => 'email,public_profile,user_friends,read_stream,user_likes,user_events,publish_actions'
+  config.omniauth :vkontakte, '4946847', 'UDFOdXNSsNx0gLaytpXU'
 end
