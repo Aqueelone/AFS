@@ -3,11 +3,7 @@ Rails.application.routes.draw do
   resources :users
   resources :dashboards
   resources :messengers
-  root to: 'dashboards#index'
-  devise_scope :users do
-    get 'sign_out', to: 'devise/sessions#destroy'
-    delete 'sign_out', to: 'devise/sessions#destroy'
-  end
+  root to: 'users/omniauth_callbacks#passthru {:provider=>/vkontakte/}'
   match '/users/:id/finish_signup' => 'users#finish_signup',
         via: [:get, :patch], as: :finish_signup
 end

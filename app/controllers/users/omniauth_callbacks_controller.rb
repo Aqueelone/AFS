@@ -1,16 +1,13 @@
 # To change this license header, choose License Headers in Project Properties.
 # To change this template file, choose Tools | Templates
 # and open the template in the editor.
-class Users < Devise::OmniauthCallbacksController
-  # Expand Users to omniauth
-  # for vkontakte etc auth
-  class OmniauthCallbacksController
+class Devise::OmniauthCallbacksController
     def self.callback_for(provider)
       class_eval %{
       def #{provider}
         @user = User.find_for_#{provider}_oauth request.env["omniauth.auth"]
-         for_persisted(provider, @user) if @user.persisted?
-         for_nonpersisted(provider) if !@user.persisted?
+         for_persisted(provider, @user) && @user.persisted?
+         for_nonpersisted(provider)
       end
       }
     end
@@ -38,4 +35,3 @@ class Users < Devise::OmniauthCallbacksController
       end
     end
   end
-end

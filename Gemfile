@@ -7,6 +7,7 @@ gem 'rake'
 
 #auth
 gem 'devise'
+gem 'oauth2'
 gem 'omniauth'
 gem 'omniauth-twitter'
 gem 'omniauth-facebook'

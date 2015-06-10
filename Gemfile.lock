@@ -622,6 +622,7 @@ DEPENDENCIES
   jquery-turbolinks
   jshintrb
   less-rails
+  oauth2
   omniauth
   omniauth-facebook
   omniauth-instagram
