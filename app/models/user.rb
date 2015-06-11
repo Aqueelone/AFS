@@ -14,8 +14,12 @@
 #   t.string   :last_sign_in_ip,        limit: 128
 #   t.datetime :created_at,                                         null: false
 #   t.datetime :updated_at,                                         null: false
+#   t.string   :confirmation_token
+#   t.datetime :confirmed_at
+#   t.datetime :confirmation_sent_at
 # end
 #
+# add_index :users, [:confirmation_token], name: :index_users_on_confirmation_token, unique: true, using: :btree
 # add_index :users, [:email], name: :index_users_on_email, using: :btree
 # add_index :users, [:name], name: :index_users_on_name, using: :btree
 
@@ -23,41 +27,39 @@ class User < ActiveRecord::Base
   TEMP_EMAIL_PREFIX = 'change@me'
   TEMP_EMAIL_REGEX = /\Achange@me/
 
-  has_one  :dashboard
-  has_one  :messenger
-  has_many :identities
-  
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable
   devise :database_authenticatable, :registerable, :confirmable,
     :recoverable, :rememberable, :trackable, :validatable, :omniauthable
 
+  attr_accessible :email, :password, :password_confirmation, :remember_me, 
+    :name, :is_admin, :is_moderator, :current_sign_in_at, :current_sign_in_ip
   validates_format_of :email, :without => TEMP_EMAIL_REGEX, on: :update
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :name, :is_admin, :is_moderator
+  validates :password, length: {minimum: 0, maximum: 120}, on: :update, allow_blank: true
 
   def self.find_for_oauth(auth, signed_in_resource = nil)
-
-    # Получить identity пользователя, если он уже существует
+    
+    # Get the identity and user if they exist
     identity = Identity.find_for_oauth(auth)
-
-    # Если signed_in_resource предоставлен оно всегда переписывает существующего пользователя
-    # что бы identity не была закрыта случайно созданным аккаунтом.
-    # Заметьте, что это может оставить зомби-аккаунты (без прикрепленной identity)
-    # которые позже могут быть удалены
+    
+    # If a signed_in_resource is provided it always overrides the existing user
+    # to prevent the identity being locked with accidentally created accounts.
+    # Note that this may leave zombie accounts (with no associated identity) which
+    # can be cleaned up at a later date.
     user = signed_in_resource ? signed_in_resource : identity.user
-
-    # Создать пользователя, если нужно
-    if user.nil?
-
-      # Получить email пользователя, если его предоставляет провайдер
-      # Если email не был предоставлен мы даем пользователю временный и просим
-      # пользователя установить и подтвердить новый в следующим шаге через UsersController.finish_signup
+puts auth
+    # Create the user if needed
+    if !user
+      # Get the existing user by email if the provider gives us a verified email.
+      # If no verified email was provided we assign a temporary email and ask the
+      # user to verify it on the next step via UsersController.finish_signup
       email_is_verified = auth.info.email && (auth.info.verified || auth.info.verified_email)
       email = auth.info.email if email_is_verified
       user = User.where(:email => email).first if email
 
-      # Создать пользователя, если это новая запись
-      if user.nil?
+      # Create the user if it's a new registration
+      if !user
+      puts'!!!!'
         user = User.new(
           name: auth.extra.raw_info.name,
           #username: auth.info.nickname || auth.uid,
@@ -69,7 +71,7 @@ class User < ActiveRecord::Base
       end
     end
 
-    # Связать identity с пользователем, если необходимо
+    # Associate the identity with the user if needed
     if identity.user != user
       identity.user = user
       identity.save!

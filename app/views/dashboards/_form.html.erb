@@ -1,0 +1,62 @@
+<%= form_for(@ticket) do |f| %>
+  <% if @ticket.errors.any? %>
+    <div class="alert alert-error">
+        <b><%= pluralize(@ticket.errors.count, "error") %> prohibited this ticket from being saved:</b>
+
+        <ul>
+            <% @ticket.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+        </ul>
+    </div>
+  <% end %>
+  <div class="field">
+      <%  if @ticket.user_id %>
+        <%  user_now = User.find(@ticket.user_id) %>
+        <%= f.label :user_id, "Feedback by " + user_now.name.to_s %>
+        <%  if current_user.is_admin || current_user.is_moderator %>
+          <%= f.select :user_id, User.order("name ASC").map { |c| [c.name, c.id] }, :include_blank => false %>
+        <% else %>
+          <%= f.hidden_field :user_id, :class => "span5 hidden" %>
+        <% end %>
+      <% end %>
+  </div>
+  <div class="field">
+      <%= f.label :category_id %>
+      <%= f.select :category_id, Category.order("name ASC").map { |c| [c.name, c.id] }, :include_blank => true %>
+  </div>
+  <div class="field">
+      <%= f.label :ticket_status_id %> 
+      <% if @ticket.ticket_status && (@ticket.ticket_status.is_closed && !current_user.is_admin) %>
+        <span class="label label-info">
+            <%=@ticket.ticket_status.name %>
+        </span>
+        <%= f.hidden_field :ticket_status_id, :class => "span5 hidden" %>
+      <% else %>
+        <% @ticket_statuses =  TicketStatus.order("position ASC") %>
+        <% if !current_user.is_admin %>
+          <% @ticket_statuses = @ticket_statuses.where(is_closed: false) %>
+          <% if !current_user.is_moderator %>
+            <% @ticket_statuses = @ticket_statuses.where(is_moderable: false) %>
+          <% end %>
+        <% end %>
+        <%= f.select :ticket_status_id, @ticket_statuses.map { |c| [c.name, c.id] }, :include_blank => true %>
+      <% end %>
+  </div>
+  <div class="field">
+      <%= f.label :title %>
+      <%= f.text_field :title, :class => "span5" %>
+  </div>
+  <div class="field">
+      <%= f.label :description %>
+      <%= f.text_area :description, :class => "tinymce", :rows => 40, :cols => 120 %>
+  </div>
+  <div class="form-actions">
+      <%= f.submit :class => "button btn btn-success" %><br />
+      <% if @ticket.id %>
+        <%= link_to 'Cancel', @ticket, :class => "button btn" %>
+      <% else %>
+        <%= link_to 'Cancel', tickets_path %>
+      <% end %>
+  </div>
+<% end %>

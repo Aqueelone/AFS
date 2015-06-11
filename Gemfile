@@ -15,7 +15,6 @@ gem 'omniauth-vkontakte'
 gem 'omniauth-instagram'
 
 #http
-gem 'puma'
 gem 'protected_attributes'
 # Use postgresql9.4 as the database for Active Record
 gem 'pg'
@@ -39,8 +38,6 @@ gem 'sdoc', group: :doc
 gem 'bcrypt'
 
 # Use Unicorn as the app server
-gem 'unicorn'
-
 gem 'eventmachine'
 gem 'em-synchrony'
 gem 'em-websocket'
@@ -156,5 +153,8 @@ group :development, :test do
 
   # silence assets
   gem "quiet_assets"
+  
+  # local env up
+  gem 'dotenv-rails'
 end
 

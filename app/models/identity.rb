@@ -10,6 +10,7 @@
 
 class Identity < ActiveRecord::Base
   belongs_to :user
+  attr_accessible :uid, :provider
   validates :uid, :provider, :presence => true
   validates_uniqueness_of :uid, :scope => :provider
 

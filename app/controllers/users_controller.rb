@@ -7,6 +7,7 @@ before_action :set_user, only: [:show, :edit, :update, :destroy]
   def index
     redirect to: user_omniauth_authorize_path(provider: vkontakte)
   end
+  
   # GET /users/:id.:format
   def show
     # authorize! :read, @user
@@ -37,7 +38,6 @@ before_action :set_user, only: [:show, :edit, :update, :destroy]
     # authorize! :update, @user 
     if request.patch? && params[:user] #&& params[:user][:email]
       if @user.update(user_params)
-        @user.skip_reconfirmation!
         sign_in(@user, :bypass => true)
         redirect_to @user, notice: 'Your profile was successfully updated.'
       else
@@ -56,31 +56,6 @@ before_action :set_user, only: [:show, :edit, :update, :destroy]
     end
   end
   
-    def self.for_persisted(provider)
-      @user = User.find_for_oauth(request.env["omniauth.auth"], current_user)
-      for_nonpersisted(provider) && !@user.persisted?
-      set_flash_message(:notice, :success,
-                        kind: provider.capitalize) && is_navigational_format?
-      sign_in_and_redirect @user, event: :authentication
-    end
-
-    def self.for_nonpersisted(provider)
-      session["devise.#{provider}_data"] = env['omniauth.auth']
-      redirect_to new_user_registration_url
-    end
-
-    [:twitter, :facebook, :vkontakte, :instagram].each do |provider|
-      for_persisted provider
-    end
-
-    def after_sign_in_path_for(resource)
-      if resource.email_verified?
-        super resource
-      else
-        finish_signup_path(resource)
-      end
-    end
-    
   private
     def set_user
       @user = User.find(params[:id])
