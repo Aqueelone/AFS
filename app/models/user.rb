@@ -19,10 +19,10 @@
 #   t.datetime :confirmation_sent_at
 # end
 #
-# add_index :users, [:confirmation_token], name: :index_users_on_confirmation_token, unique: true, using: :btree
+# add_index :users, [:confirmation_token],
+#          name: :index_users_on_confirmation_token, unique: true, using: :btree
 # add_index :users, [:email], name: :index_users_on_email, using: :btree
 # add_index :users, [:name], name: :index_users_on_name, using: :btree
-
 class User < ActiveRecord::Base
   TEMP_EMAIL_PREFIX = 'change@me'
   TEMP_EMAIL_REGEX = /\Achange@me/
@@ -30,56 +30,61 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable
   devise :database_authenticatable, :registerable, :confirmable,
-    :recoverable, :rememberable, :trackable, :validatable, :omniauthable
+         :recoverable, :rememberable, :trackable, :validatable, :omniauthable
 
-  attr_accessible :email, :password, :password_confirmation, :remember_me, 
-    :name, :is_admin, :is_moderator, :current_sign_in_at, :current_sign_in_ip
-  validates_format_of :email, :without => TEMP_EMAIL_REGEX, on: :update
-  validates :password, length: {minimum: 0, maximum: 120}, on: :update, allow_blank: true
+  attr_accessible :email, :password, :password_confirmation, :remember_me,
+                  :name, :is_admin, :is_moderator, :current_sign_in_ip
+  validates :email, format: { without: TEMP_EMAIL_REGEX }, on: :update
+  validates :password, length: { minimum: 0, maximum: 120 },
+                       on: :update, allow_blank: true
 
   def self.find_for_oauth(auth, signed_in_resource = nil)
-    
     # Get the identity and user if they exist
     identity = Identity.find_for_oauth(auth)
-    
+
     # If a signed_in_resource is provided it always overrides the existing user
     # to prevent the identity being locked with accidentally created accounts.
-    # Note that this may leave zombie accounts (with no associated identity) which
-    # can be cleaned up at a later date.
     user = signed_in_resource ? signed_in_resource : identity.user
-puts auth
-    # Create the user if needed
-    if !user
-      # Get the existing user by email if the provider gives us a verified email.
-      # If no verified email was provided we assign a temporary email and ask the
-      # user to verify it on the next step via UsersController.finish_signup
-      email_is_verified = auth.info.email && (auth.info.verified || auth.info.verified_email)
-      email = auth.info.email ? email_is_verified : "#{TEMP_EMAIL_PREFIX}-#{auth.uid}-#{auth.provider}.com" 
-      user = User.where(:email => email).first if email 
 
-      # Create the user if it's a new registration
-      if !user
-      puts'!!!!'
-        user = User.new(
-          name: auth.extra.raw_info.name,
-          #username: auth.info.nickname || auth.uid,
-          email: email ? email : "#{TEMP_EMAIL_PREFIX}-#{auth.uid}-#{auth.provider}.com",
-          password: Devise.friendly_token[0,20]
-        )
-        user.skip_confirmation!
-        user.save!
-      end
-    end
+    # find the existant user by email
+    !user && user = get_user_by_email_and_auth(auth)
+
+    # Create the user if it's a new registration
+    !user && user = create_user_by_auth(auth)
 
     # Associate the identity with the user if needed
-    if identity.user != user
-      identity.user = user
-      identity.save!
-    end
+    identity.user != user && identity.user = user
+    identity.save!
     user
   end
 
+  def self.get_user_by_email_and_auth(auth)
+    # Get the existing user by email if the provider gives us a verified email.
+    # If no verified email was provided we assign a temporary email and ask the
+    # user to verify it on the next step via UsersController.finish_signup
+    User.find_by_email(get_email_by_auth(auth))
+  end
+
+  def self.create_user_by_auth(auth)
+    user = User.new(
+      name: auth.extra.raw_info.name,
+      email: get_email_by_auth(auth),
+      password: Devise.friendly_token[0, 20]
+    )
+    user.skip_confirmation!
+    user.save!
+    user
+  end
+
+  def self.get_email_by_auth(auth)
+    if auth.info.email
+      auth.info.email
+    else
+      "#{TEMP_EMAIL_PREFIX}-#{auth.uid}-#{auth.provider}.com"
+    end
+  end
+  
   def email_verified?
-    self.email && self.email !~ TEMP_EMAIL_REGEX
+    email && email !~ TEMP_EMAIL_REGEX
   end
 end
