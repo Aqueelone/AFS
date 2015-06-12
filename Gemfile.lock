@@ -367,9 +367,15 @@ GEM
       rack (~> 1.0)
     omniauth-facebook (2.0.1)
       omniauth-oauth2 (~> 1.2)
+    omniauth-google (1.0.2)
+      multi_json
+      omniauth (~> 1.0)
+      omniauth-oauth
     omniauth-instagram (1.0.1)
       omniauth (~> 1.0)
       omniauth-oauth2 (~> 1.0)
+    omniauth-linkedin (0.2.0)
+      omniauth-oauth (~> 1.0)
     omniauth-oauth (1.1.0)
       oauth
       omniauth (~> 1.0)
@@ -621,7 +627,9 @@ DEPENDENCIES
   oauth2
   omniauth
   omniauth-facebook
+  omniauth-google
   omniauth-instagram
+  omniauth-linkedin
   omniauth-twitter
   omniauth-vkontakte
   pg

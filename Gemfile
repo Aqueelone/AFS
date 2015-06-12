@@ -13,6 +13,8 @@ gem 'omniauth-twitter'
 gem 'omniauth-facebook'
 gem 'omniauth-vkontakte'
 gem 'omniauth-instagram'
+gem 'omniauth-linkedin'
+gem 'omniauth-google'
 
 #http
 gem 'protected_attributes'
