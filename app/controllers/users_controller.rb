@@ -37,9 +37,24 @@ before_action :set_user, only: [:show, :edit, :update, :destroy]
   def finish_signup
     # authorize! :update, @user 
     if request.patch? && params[:user] #&& params[:user][:email]
+      @temp_user = User.find(params[:user][:id])
+      @verified_user = User.where(email: params[:user][:email]).last
+
+      if @verified_user
+        @user = @verified_user
+        if @temp_user
+          @identity = Identity.find(params[:user][:id])
+          @identity.user_id = @verified_user.id
+          @identity.save
+        end
+      else
+        @temp_user.update(params[:user][:email]) && @temp_user
+        @user = @temp_user
+      end
+
       if @user.update(user_params)
         sign_in(@user, :bypass => true)
-        redirect_to @user, notice: 'Your profile was successfully updated.'
+        redirect_to root_url, notice: 'Your profile was successfully updated.'
       else
         @show_errors = true
       end

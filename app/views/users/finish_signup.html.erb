@@ -8,6 +8,7 @@
   <h1>Add Email</h1>
   <%= form_for(current_user, :as => 'user', :url => finish_signup_path(current_user), :html => { role: 'form'}) do |f| %>
     <div class="form-group">
+        <%= f.hidden_field :id, :class => "span5 hidden" %>
       <%= f.label :email %>
       <div class="controls">
         <%= f.text_field :email, :autofocus => true, :value => '', class: 'form-control input-lg', placeholder: 'Example: email@me.com' %>
