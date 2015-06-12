@@ -14,7 +14,7 @@ for example:
 FB_key='your Facebook application key'
 FB_secret='your Facebook application secret'
 
-Noew we use:
+Now we use:
 FB == Facebook
 VK == VKontakte
 TW == Twitter
