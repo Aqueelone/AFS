@@ -59,6 +59,7 @@ gem 'tinymce-rails'
 gem 'therubyracer'
 gem 'less-rails'
 gem "twitter-bootstrap-rails"
+gem 'compass'
 
 gem 'turbolinks'
 gem 'jquery-turbolinks'

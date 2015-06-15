@@ -11,7 +11,7 @@
             <div class="top-bar docs-bar hide-for-small">
                 <div class="top-bar">
                     <div class="container">
-                        <%= link_to "AFS", root_url, :class => "title-area left" %>
+                        <%= link_to '©', root_url, :class => "title-area" %>
                         <div class="container nav-collapse top-bar-section">
                             <ul class="right">                
                                 <% if user_signed_in? %>   
@@ -38,8 +38,30 @@
               <% end %>
           </div>
         <% end %>
-
+        <div class="content">
         <%= yield %>
+        </div>
+            <footer>
+                <div class="zurb-footer-bottom">
+                    <p class="left">&copy; BlackDream 2015</p>
 
+                    <div class="right button-bar">
+                        <p>
+                            Analitical Foresacting Systems for BlackDream 
+                        </p>
+                    </div>    
+                    <ul class="zurb-links">
+                        <li>Sergy Nazarevich</li>
+                        <li><%= bootstrap_icon_link_to "aqueelone@gmail.com", "mailto:aqueelone@gmail.com", "icon-envelope" %></li>
+                        <li><i class="icon-info-sign"></i> +382 067 163 8809</li>
+                    </ul>            
+                </div>
+            </footer>
+        </div>
+
+        <%= javascript_include_tag "application" %>
+        <%= tinymce_assets %> <%= tinymce %>
+
+    </body>
     </body>
 </html>
