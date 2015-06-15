@@ -1,8 +1,12 @@
 <div class="controlls">
     <fieldset>
         <legend>Controlls</legend>
-
+        <% if current_user %>
+        <%= bootstrap_icon_link_to 'add VKontakte', user_omniauth_authorize_path('vkontakte'), "icon-plus icon-white", :class => "button btn btn-success right" %>
+        <%= bootstrap_icon_link_to 'add Facebook', user_omniauth_authorize_path('facebook'), "icon-plus icon-white", :class => "button btn btn-success right" %>
+        <% else %>
         <%= bootstrap_icon_link_to 'New User', new_user_registration_path, "icon-plus icon-white", :class => "button btn btn-success right" %>
         <%= bootstrap_icon_link_to 'Login', new_user_session_path, "icon-plus icon-white", :class => "button btn btn-success  right" %>
+        <% end %>
     </fieldset>
 </div>
