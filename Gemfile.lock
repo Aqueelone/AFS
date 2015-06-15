@@ -683,6 +683,3 @@ DEPENDENCIES
   vkontakte_api
   webmock
   whenever
-
-BUNDLED WITH
-   1.10.3

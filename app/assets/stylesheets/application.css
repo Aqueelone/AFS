@@ -23,7 +23,7 @@ body {
     padding-right: 20px;
 }
 .content {
-    min-height: 600px;  
+    min-height: 630px;  
 }
 a {
     color: #9c9292;
@@ -59,13 +59,22 @@ table a {
 
 .title-area {
     font-size: 1.5em;
-    background: url(logo2.png) 10px -3px no-repeat;
-    padding-left: 280px;
+    background: url(logo.png) 15px 1px no-repeat;
+    padding-left: 180px;
     padding-bottom: 40px;
     margin-left: -30px;
 }
 a:hover.title-area {
     text-decoration: none;
+}
+.top-bar-section ul > li {
+    list-style: none;
+    float: left;    
+  padding-left: 20px;
+}
+.top-bar-section ul > li a:hover{
+    text-decoration: none;
+    color: #9c9292;
 }
 h1 {
     margin: auto !important;
@@ -81,8 +90,7 @@ div.field select, div.field input, div.field textarea{
     border-top-left-radius: 9px;
     background-color: #ddf;
     border: #ddf solid 2px;
-    box-shadow: #9c9292 1px 2px 2px;    
-    height: 40px; 
+    box-shadow: #9c9292 1px 2px 2px;
 }
 div.field input{       
     font-size: 1em;
@@ -174,10 +182,6 @@ table tbody tr.template_off{
     display: none;
 }
 
-
-.content{
-    min-height: 600px;
-}
 fieldset {
     display: inline-table;
 }
@@ -194,7 +198,7 @@ span.label a:hover {
 }
 
 footer {
-    line-height: 0.3em;
+    line-height: 0em;
     box-shadow: 0px -2px 5px #9c9292, 0px -1px 2px whitesmoke;
 }
 .zurb-footer-bottom {
