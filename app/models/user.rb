@@ -27,10 +27,12 @@ class User < ActiveRecord::Base
   TEMP_EMAIL_PREFIX = 'change@me'
   TEMP_EMAIL_REGEX = /\Achange@me/
 
+  has_many :identities
+
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable
-  devise :database_authenticatable, :registerable, :confirmable,
-         :recoverable, :rememberable, :trackable, :validatable, :omniauthable
+  devise :database_authenticatable, :registerable, :recoverable,
+         :rememberable, :trackable, :validatable, :omniauthable
 
   attr_accessible :email, :password, :password_confirmation, :remember_me,
                   :name, :is_admin, :is_moderator, :current_sign_in_ip
@@ -86,5 +88,12 @@ class User < ActiveRecord::Base
   
   def email_verified?
     email && email !~ TEMP_EMAIL_REGEX
+  end
+
+  class << self
+    def serialize_from_session(key,salt)
+      record = to_adapter.get(key[0].to_param)
+      record if record && record.authenticatable_salt == salt
+    end
   end
 end
