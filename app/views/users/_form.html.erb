@@ -1,0 +1,47 @@
+<%= form_for(@user) do |f| %>
+  <% if @user.errors.any? %>
+    <div class="alert alert-error">
+        <b><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</b>
+        <ul>
+            <% @user.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+        </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+      <%= f.label :name %>
+      <%= f.text_field :name%>
+  </div>
+  <div class="field">
+      <%= f.label :email %>
+      <%= f.text_field :email %>
+  </div>
+  <% if admin? %>
+    <div class="field">
+        <%= f.label "Aproved rights:" %>
+        <div class="left">    
+            <%= f.label :is_admin %>
+            <%= f.check_box :is_admin %>
+        </div>
+        <div class="right">    
+            <%= f.label :is_moderator %>
+            <%= f.check_box :is_moderator %>
+        </div>
+    </div>
+  <% end %>
+<div class="clearfix"></div>
+  <div class="field">
+      <%= f.label :password %>
+      <%= f.password_field :password %>
+  </div>
+  <div class="field">
+      <%= f.label :password_confirmation %>
+      <%= f.password_field :password_confirmation %>
+  </div>
+  <div class="form-actions">
+      <%= f.submit :class => "button btn btn-success" %><br />
+      <%= link_to 'Cancel', users_path %>
+  </div>
+<% end %>

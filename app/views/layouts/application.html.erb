@@ -7,13 +7,18 @@
         <%= csrf_meta_tags %>
     </head>
     <body>
+        <div id="wrap" class="wrap">
         <div class="inner-wrap">
-            <div class="top-bar docs-bar hide-for-small">
+            <div class="navbar navbar-inverse" role="navigation">
                 <div class="top-bar">
                     <div class="container">
-                        <%= link_to '©', root_url, :class => "title-area" %>
-                        <div class="container nav-collapse top-bar-section">
-                            <ul class="right">                
+                        <div class="navbar-header">
+                            <a class="navbar-brand" href="/">
+                                <img alt="BlackDream" src="/assets/logo.png">
+                            </a>
+                        </div>
+                        <div class="container collapse navbar-collapse">
+                            <ul class="nav navbar-nav navbar-right">                
                                 <% if user_signed_in? %>   
                                   <% if current_user.is_admin || current_user.is_moderator %>
                                     <li><%= link_to 'Users', users_path %></li>
@@ -41,7 +46,8 @@
         <div class="content">
         <%= yield %>
         </div>
-            <footer>
+    </div>
+            <footer class="footer">
                 <div class="zurb-footer-bottom">
                     <p class="left">&copy; BlackDream 2015</p>
 
@@ -57,11 +63,9 @@
                     </ul>            
                 </div>
             </footer>
-        </div>
 
         <%= javascript_include_tag "application" %>
         <%= tinymce_assets %> <%= tinymce %>
 
-    </body>
     </body>
 </html>

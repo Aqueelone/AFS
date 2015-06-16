@@ -1,0 +1,40 @@
+<div class="page-header">
+    <% if current_user.is_admin || current_user.is_moderator %>
+      <%= bootstrap_icon_link_to 'New User', new_user_path, "icon-plus icon-white", :class => "button btn btn-success" %>
+    <% end %>
+</div>
+
+<%= show_flash %>
+
+<div class="controlls">
+<fieldset>
+    <legend>Profile of <%= @user.name %>:</legend>
+    <table role="grid" class="table table-striped table-bordered table-condensed">
+        <tr><td  scope="row">Name</td>
+            <td>
+                <%= @user.name %>
+                <% if @user.is_admin %>
+                  <span class="label label-info">Admin</span>
+                <% end %>
+                <% if @user.is_moderator %>
+                  <span class="label label-info">Moderator</span>
+                <% end %>
+            </td>
+        </tr>
+        <tr><td  scope="row">Email</td><td><%= @user.email %></td></tr>
+        <tr><td  scope="row">Current SignIn at</td><td><%= @user.current_sign_in_at %></td></tr>
+        <tr><td  scope="row">Last SignIn at</td><td><%= @user.last_sign_in_at %></td></tr>   
+        <tr><td  scope="row">Current SignIn IP</td><td><%= @user.current_sign_in_ip %></td></tr>
+        <tr><td  scope="row">Last SignIn IP</td><td><%= @user.last_sign_in_ip %></td></tr>
+        <tr><td  scope="row">SignInCount</td><td><%= @user.sign_in_count %></td></tr>
+        <tr><td  scope="row"></td><td>
+                <% if current_user && (@user.id == current_user.id || current_user.is_admin || current_user.is_moderator) %>
+                  <%= bootstrap_icon_link_to 'Edit', edit_user_path(@user), "icon-pencil icon-white", :class => "button btn btn-small btn-primary" %>
+                  <% if current_user.is_admin %>
+                    <%= bootstrap_icon_link_to 'Delete', @user, "icon-trash icon-white", confirm: 'Are you sure?', method: :delete, :class => "button btn btn-small btn-danger" %>
+                  <% end %>
+                <% end %>
+            </td></tr>
+    </table>
+</fieldset>
+</div>

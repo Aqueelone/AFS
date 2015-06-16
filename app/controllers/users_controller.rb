@@ -1,11 +1,12 @@
-#UsersController
+#UsersController7
 #Analitical Forecasting System
 #aqueelone@gmail.com
 class UsersController < ApplicationController
 before_action :set_user, only: [:show, :edit, :update, :destroy]
 
+  # GET /users GET /users.json
   def index
-    redirect to: user_omniauth_authorize_path(provider: vkontakte)
+    @users = User.eager_load(:identities).order('users.created_at DESC')
   end
   
   # GET /users/:id.:format
@@ -13,6 +14,18 @@ before_action :set_user, only: [:show, :edit, :update, :destroy]
     # authorize! :read, @user
   end
 
+  # GET /users/new GET /users/new.json
+  def new
+    @user = User.new  
+  end
+
+  # POST /users POST /users.json
+  def create
+    @user = User.new(params[:user])
+    @user.skip_confirmation!
+    !@user.save && (redirect_to new_user_session_path)
+  end
+  
   # GET /users/:id/edit
   def edit
     # authorize! :update, @user
@@ -20,10 +33,17 @@ before_action :set_user, only: [:show, :edit, :update, :destroy]
 
   # PATCH/PUT /users/:id.:format
   def update
+    @user = User.find(params[:id])
+    @param = params[:user]
+
+    if @param[:password].empty?
+      @param.delete(:password)
+      @param.delete(:password_confirmation)
+    end
     # authorize! :update, @user
     respond_to do |format|
-      if @user.update(user_params)
-        sign_in(@user == current_user ? @user : current_user, :bypass => true)
+      if @user.update_attributes(@param)
+        !current_user && sign_in(@user, :bypass => true)
         format.html { redirect_to @user, notice: 'Your profile was successfully updated.' }
         format.json { head :no_content }
       else
