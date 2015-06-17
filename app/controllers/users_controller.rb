@@ -22,6 +22,7 @@ before_action :set_user, only: [:show, :edit, :update, :destroy]
   # POST /users POST /users.json
   def create
     @user = User.new(params[:user])
+    @user.confirmed_at = Time.now
     @user.skip_confirmation!
     !@user.save && (redirect_to new_user_session_path)
   end
@@ -63,7 +64,7 @@ before_action :set_user, only: [:show, :edit, :update, :destroy]
       if @verified_user
         @user = @verified_user
         if @temp_user
-          @identity = Identity.find(params[:user][:id])
+          @identity = Identity.where(user_id: params[:user][:id]).last
           @identity.user_id = @verified_user.id
           @identity.save
         end
