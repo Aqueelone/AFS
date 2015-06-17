@@ -233,5 +233,5 @@ Devise.setup do |config|
   config.omniauth :vkontakte, ENV['VK_key'], ENV['VK_secret']
   config.omniauth :twitter, ENV['TW_key'], ENV['TW_secret'],
     { authorize_params: { force_login: 'true', use_authorize: 'true' } }
-  config.omniauth :linked_in, ENV['LI_key'], ENV['LI_secret']
+  config.omniauth :linkedin, ENV['LI_key'], ENV['LI_secret']
 end
