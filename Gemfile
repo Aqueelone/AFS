@@ -14,7 +14,7 @@ gem 'omniauth-facebook'
 gem 'omniauth-vkontakte'
 gem 'omniauth-instagram'
 gem 'omniauth-linkedin'
-gem 'omniauth-google'
+gem 'omniauth-google-oauth2'
 
 #http
 gem 'protected_attributes'

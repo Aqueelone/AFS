@@ -234,4 +234,17 @@ Devise.setup do |config|
   config.omniauth :twitter, ENV['TW_key'], ENV['TW_secret'],
     { authorize_params: { force_login: 'true', use_authorize: 'true' } }
   config.omniauth :linkedin, ENV['LI_key'], ENV['LI_secret']
+  config.omniauth :google_oauth2, ENV['GP_key'], ENV['GP_secret'],
+    {
+                  name: 'google',
+                  scope: 'plus.login, userinfo.email, userinfo.profile,
+                          plus.media.upload, plus.me, plus.circles.read,
+                          plus.circles.write, plus.profiles.read,
+                          plus.stream.read, plus.stream.write,
+                          apps.groups.migration, apps.groups.settings,
+                          youtube, youtube.readonly, youtubepartner,
+                          youtube.readonly, youtube.upload,
+                          youtubepartner, youtubepartner-channel-audit',
+                  prompt: "select_account"
+    }
 end
